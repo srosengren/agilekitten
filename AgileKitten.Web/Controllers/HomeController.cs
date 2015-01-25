@@ -72,7 +72,7 @@ namespace AgileKitten.Web.Controllers
                 Scopes = { "user", "notifications" },
                 State = csrf
             };
-            var oauthLoginUrl = client.Oauth.GetGitHubLoginUrl(request);
+            var oauthLoginUrl = Client.Oauth.GetGitHubLoginUrl(request);
             return oauthLoginUrl.ToString();
         }
     }
