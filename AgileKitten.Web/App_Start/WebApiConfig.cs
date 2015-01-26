@@ -16,8 +16,8 @@ namespace AgileKitten.Web
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "api/{action}/{id}",
+                defaults: new {controller = "GHApi", id = RouteParameter.Optional }
             );
         }
     }

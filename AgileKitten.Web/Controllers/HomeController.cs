@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -10,36 +11,15 @@ using System.Web.Security;
 
 namespace AgileKitten.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-
-        private GitHubClient client;
-        public GitHubClient Client
-        {
-            get
-            {
-                return client ?? (client = new GitHubClient(new ProductHeaderValue("srosengren-agilekitten"), new Uri("https://github.com/")));
-            }
-        }
-
-        private string clientId;
-
-        public string ClientId
-        {
-            get { return clientId ?? (clientId = ConfigurationManager.AppSettings["GHClientId"]); }
-        }
-
-        private string clientSecret;
-
-        public string ClientSecret
-        {
-            get { return clientSecret ?? (clientSecret = ConfigurationManager.AppSettings["GHClientSecret"]); }
-        }
-
 
         // GET: Home
         public async Task<ActionResult> Index()
         {
+            if (User.Identity.IsAuthenticated)
+                return View("Authenticated");
+
             return View();
         }
 
@@ -48,6 +28,7 @@ namespace AgileKitten.Web.Controllers
         /// </summary>
         /// <param name="id">Type of access requested</param>
         /// <returns></returns>
+        [AllowAnonymous]
         public async Task<ActionResult> Login(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -56,9 +37,40 @@ namespace AgileKitten.Web.Controllers
             return Redirect(GetOauthLoginUrl());
         }
 
-        public async Task<ActionResult> LoginCallback()
+        [AllowAnonymous]
+        public async Task<ActionResult> LoginCallback(string code, string state)
         {
-            return RedirectToAction("index");
+            if (!String.IsNullOrEmpty(code))
+            {
+                var expectedState = Session["CSRF:State"] as string;
+                if (state != expectedState) 
+                    throw new InvalidOperationException("SECURITY FAIL!");
+                Session["CSRF:State"] = null;
+
+                var token = await Client.Oauth.CreateAccessToken(
+                    new OauthTokenRequest(ClientId, ClientSecret, code)
+                    );
+
+                var ctx = Request.GetOwinContext();
+                var authManager = ctx.Authentication;
+
+                var identity = new ClaimsIdentity(new Claim[] { 
+                    new Claim(ClaimTypes.Authentication,token.AccessToken)
+                }, "ApplicationCookie");
+
+                authManager.SignIn(identity);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Logout()
+        {
+            var ctx = Request.GetOwinContext();
+            var authManager = ctx.Authentication;
+
+            authManager.SignOut("ApplicationCookie");
+            return RedirectToAction("Index");
         }
 
         private string GetOauthLoginUrl()
