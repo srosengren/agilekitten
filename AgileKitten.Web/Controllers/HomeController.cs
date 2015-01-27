@@ -1,4 +1,4 @@
-﻿using Octokit;
+﻿using AgileKitten.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace AgileKitten.Web.Controllers
 {
@@ -17,10 +16,14 @@ namespace AgileKitten.Web.Controllers
         // GET: Home
         public async Task<ActionResult> Index()
         {
-            if (User.Identity.IsAuthenticated)
-                return View("Authenticated");
 
-            return View();
+            if (!User.Identity.IsAuthenticated)
+                return View();
+
+            var vm = new AuthenticatedVM();
+            vm.Repositories = await Service.GetRepositories();
+
+            return View("Authenticated",vm);
         }
 
         /// <summary>
@@ -43,22 +46,11 @@ namespace AgileKitten.Web.Controllers
             if (!String.IsNullOrEmpty(code))
             {
                 var expectedState = Session["CSRF:State"] as string;
-                if (state != expectedState) 
+                if (state != expectedState)
                     throw new InvalidOperationException("SECURITY FAIL!");
                 Session["CSRF:State"] = null;
 
-                var token = await Client.Oauth.CreateAccessToken(
-                    new OauthTokenRequest(ClientId, ClientSecret, code)
-                    );
-
-                var ctx = Request.GetOwinContext();
-                var authManager = ctx.Authentication;
-
-                var identity = new ClaimsIdentity(new Claim[] { 
-                    new Claim(ClaimTypes.Authentication,token.AccessToken)
-                }, "ApplicationCookie");
-
-                authManager.SignIn(identity);
+                SignIn(code);
             }
 
             return RedirectToAction("Index");
@@ -71,21 +63,6 @@ namespace AgileKitten.Web.Controllers
 
             authManager.SignOut("ApplicationCookie");
             return RedirectToAction("Index");
-        }
-
-        private string GetOauthLoginUrl()
-        {
-            string csrf = Membership.GeneratePassword(24, 1);
-            Session["CSRF:State"] = csrf;
-
-            // 1. Redirect users to request GitHub access
-            var request = new OauthLoginRequest(ClientId)
-            {
-                Scopes = { "user", "notifications" },
-                State = csrf
-            };
-            var oauthLoginUrl = Client.Oauth.GetGitHubLoginUrl(request);
-            return oauthLoginUrl.ToString();
         }
     }
 }

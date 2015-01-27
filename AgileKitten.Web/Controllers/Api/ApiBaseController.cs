@@ -1,4 +1,5 @@
-﻿using Octokit;
+﻿using AgileKitten.Core.Service;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +11,20 @@ namespace AgileKitten.Web.Controllers.Api
 {
     public class ApiBaseController : ApiController
     {
-        private GitHubClient client;
-        public GitHubClient Client
+        private Service service;
+        public Service Service
         {
             get
             {
-                if (client == null)
-                    client = new GitHubClient(new ProductHeaderValue("srosengren-agilekitten"), new Uri("https://github.com/"));
-                if (User != null && User.Identity != null && !string.IsNullOrWhiteSpace(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Authentication).Value))
-                    client.Credentials = new Credentials(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Authentication).Value);
-                return client;
+                return service ?? (service = new Service());
             }
+        }
+
+        public ApiBaseController()
+        {
+            Service.Client = new GitHubClient(new ProductHeaderValue("srosengren-agilekitten"), new Uri("https://github.com/"));
+            if (User != null && User.Identity != null && !string.IsNullOrWhiteSpace(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Authentication).Value))
+                    Service.Client.Credentials = new Credentials(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Authentication).Value);
         }
     }
 }

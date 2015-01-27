@@ -1,4 +1,4 @@
-﻿using Octokit;
+﻿using AgileKitten.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +14,7 @@ namespace AgileKitten.Web.Controllers.Api
     {
         public async Task<IEnumerable<Repository>> GetRepositories()
         {
-            return await Client.Repository.GetAllForCurrent();
-        }
-
-        public async Task<IEnumerable<Issue>> GetIssues()
-        {
-            return await Client.Issue.GetAllForCurrent();
+            return await Service.GetRepositories();
         }
     }
 }

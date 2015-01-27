@@ -1,5 +1,19 @@
-﻿@{
+﻿@model AgileKitten.Web.Models.AuthenticatedVM
+@{
     ViewBag.Title = "Index";
 }
 
 <h2>Repositories</h2>
+<div data-bind="with: repositoriesVM">
+    <ul data-bind="foreach: repositories">
+        <li data-bind="text: name"></li>
+    </ul>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/application")
+
+    <script>
+        application.init(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)));
+    </script>
+}
