@@ -16,13 +16,20 @@ namespace AgileKitten.Core.Model
         [JsonProperty(PropertyName = "openIssues")]
         public int OpenIssues { get; set; }
 
+        [JsonProperty(PropertyName = "ownerName")]
+        public string OwnerName { get; set; }
+
+        [JsonProperty(PropertyName = "issues")]
+        public IEnumerable<Issue> Issues { get; set; }
+
         public static Repository Make(Octokit.Repository repo)
         {
             return new Repository
             {
                 GithubId = repo.Id,
                 Name = repo.Name,
-                OpenIssues = repo.OpenIssuesCount
+                OpenIssues = repo.OpenIssuesCount,
+                OwnerName = repo.Owner.Name
             };
         }
     }

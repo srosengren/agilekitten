@@ -16,5 +16,10 @@ namespace AgileKitten.Web.Controllers.Api
         {
             return await Service.GetRepositories();
         }
+
+        public async Task<Board> GetBoard(int repoId)
+        {
+            return await Service.GetBoard(repoId);
+        }
     }
 }
