@@ -6,7 +6,7 @@
 <h2>Repositories</h2>
 <div data-bind="with: repositoriesVM">
     <ul data-bind="foreach: repositories">
-        <li data-bind="text: name"></li>
+        <li data-bind="text: name,click: $parent.loadRepo"></li>
     </ul>
 </div>
 

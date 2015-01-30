@@ -129,6 +129,7 @@
     <Content Include="Scripts\knockout-3.2.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\sr.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

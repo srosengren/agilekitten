@@ -20,7 +20,8 @@ namespace AgileKitten.Web.Controllers
             if (!User.Identity.IsAuthenticated)
                 return View();
 
-            var vm = new AuthenticatedVM();
+            
+            var vm = new AuthenticatedVM(Url.Content("~/"));
             vm.Repositories = await Service.GetRepositories();
 
             return View("Authenticated",vm);
