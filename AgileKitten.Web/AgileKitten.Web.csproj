@@ -122,9 +122,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\application.css">
+      <DependentUpon>application.less</DependentUpon>
+    </Content>
+    <Content Include="Content\application.min.css">
+      <DependentUpon>application.css</DependentUpon>
+    </Content>
+    <Content Include="Content\site.css">
+      <DependentUpon>site.less</DependentUpon>
+    </Content>
+    <Content Include="Content\site.min.css">
+      <DependentUpon>site.css</DependentUpon>
+    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\App\application.js" />
+    <Content Include="Scripts\App\repositoryVM.js" />
     <Content Include="Scripts\knockout-3.2.0.debug.js" />
     <Content Include="Scripts\knockout-3.2.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
@@ -162,10 +175,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Authenticated.cshtml" />
+    <Content Include="Content\site.less" />
+    <Content Include="Content\site.css.map">
+      <DependentUpon>site.css</DependentUpon>
+    </Content>
+    <Content Include="Content\application.less" />
+    <Content Include="Content\application.css.map">
+      <DependentUpon>application.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\App\ko.components.js" />
     <None Include="Web.Secret.config" />
   </ItemGroup>
   <ItemGroup>

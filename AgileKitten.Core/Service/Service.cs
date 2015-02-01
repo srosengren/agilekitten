@@ -20,11 +20,11 @@ namespace AgileKitten.Core.Service
 
         public gh.GitHubClient Client { get; set; }
 
-        public async Task<IEnumerable<Repository>> GetRepositories()
+        public async Task<IEnumerable<RepositoryMeta>> GetRepositories()
         {
             var ghRepos = await Client.Repository.GetAllForCurrent();
 
-            return ghRepos.Select(r => AgileKitten.Core.Model.Repository.Make(r));
+            return ghRepos.Select(r => AgileKitten.Core.Model.RepositoryMeta.Make(r));
         }
 
         public async Task<IEnumerable<Issue>> GetIssuesForRepository(string owner, string name)
@@ -47,7 +47,7 @@ namespace AgileKitten.Core.Service
             return labels.Select(l => Label.Make(l));
         }
 
-        public async Task<Board> GetBoard(int repoId)
+        public async Task<RepositoryContent> GetRepository(int repoId)
         {
             var board  = await Repository.GetBoard(repoId);
             var labelTask = GetLabelsForRepository(board.OwnerName,board.RepositoryName);

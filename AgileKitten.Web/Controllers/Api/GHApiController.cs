@@ -12,14 +12,14 @@ namespace AgileKitten.Web.Controllers.Api
 {
     public class GHApiController : ApiBaseController
     {
-        public async Task<IEnumerable<Repository>> GetRepositories()
+        public async Task<IEnumerable<RepositoryMeta>> GetRepositories()
         {
             return await Service.GetRepositories();
         }
 
-        public async Task<Board> GetBoard(int repoId)
+        public async Task<RepositoryContent> GetRepository(int repoId)
         {
-            return await Service.GetBoard(repoId);
+            return await Service.GetRepository(repoId);
         }
     }
 }

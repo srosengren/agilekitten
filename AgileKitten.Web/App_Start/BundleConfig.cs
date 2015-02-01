@@ -21,10 +21,19 @@ namespace AgileKitten.Web
 
 
             bundles.Add(new Bundle("~/bundles/application")
-                .Include("~/Scripts/sr.js")
                 .Include("~/Scripts/knockout-{version}.js")
                 .Include("~/Scripts/knockout.mapping-*")
+                .Include("~/Scripts/sr.js")
+                .Include("~/Scripts/App/ko.components.js")
                 .Include("~/Scripts/App/application.js")
+                .Include("~/Scripts/App/repositoryVM.js")
+                );
+
+            bundles.Add(new StyleBundle("~/bundles/mainstyle")
+                .Include("~/Content/site.css")
+                );
+            bundles.Add(new StyleBundle("~/bundles/appstyle")
+                .Include("~/Content/application.css")
                 );
         }
     }

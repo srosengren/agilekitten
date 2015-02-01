@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgileKitten.Core.Model
 {
-    public class Board
+    public class RepositoryContent
     {
         [JsonProperty(PropertyName = "githubRepositoryId")]
         public int GithubRepositoryId { get; set; }

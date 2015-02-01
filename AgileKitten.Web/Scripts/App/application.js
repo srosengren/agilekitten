@@ -1,5 +1,7 @@
 ﻿var application = (function (app) {
 
+    app.openRepository = ko.observable();
+
     app.repositoriesVM = (function (reposVM) {
         reposVM.repositories = ko.observableArray();
         reposVM.init = function (repos) {
@@ -7,7 +9,12 @@
         }
         reposVM.loadRepo = function (repo) {
             sr.ajax({
-                url: app.settings.rootUrl + 'api/getboard?repoid=' + repo.githubId
+                url: app.settings.rootUrl + 'api/getrepository?repoid=' + repo.githubId,
+                success: function(data)
+                {
+                    data = JSON.parse(data);
+                    app.openRepository(app.repository.make(data));
+                }
             });
         };
 

@@ -9,9 +9,9 @@ namespace AgileKitten.Core.Repositories
 {
     public class GHRepository
     {
-        public async Task<Board> GetBoard(int repoId)
+        public async Task<RepositoryContent> GetBoard(int repoId)
         {
-            return new Board
+            return new RepositoryContent
             {
                 OwnerName = "srosengren",
                 RepositoryName = "agilekitten"

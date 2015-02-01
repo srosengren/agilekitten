@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgileKitten.Core.Model
 {
-    public class Repository
+    public class RepositoryMeta
     {
         [JsonProperty(PropertyName = "githubId")]
         public int GithubId { get; set; }
@@ -19,12 +19,9 @@ namespace AgileKitten.Core.Model
         [JsonProperty(PropertyName = "ownerName")]
         public string OwnerName { get; set; }
 
-        [JsonProperty(PropertyName = "issues")]
-        public IEnumerable<Issue> Issues { get; set; }
-
-        public static Repository Make(Octokit.Repository repo)
+        public static RepositoryMeta Make(Octokit.Repository repo)
         {
-            return new Repository
+            return new RepositoryMeta
             {
                 GithubId = repo.Id,
                 Name = repo.Name,

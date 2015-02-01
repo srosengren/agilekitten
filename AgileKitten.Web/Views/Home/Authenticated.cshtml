@@ -3,11 +3,34 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Repositories</h2>
-<div data-bind="with: repositoriesVM">
+@section Head {
+    @Styles.Render("~/bundles/appstyle")
+}
+
+<h2 data-bind="text: openRepository() ? openRepository().repositoryName : 'Repositories'">Repositories</h2>
+<div data-bind="with: repositoriesVM,visible: !openRepository()">
     <ul data-bind="foreach: repositories">
         <li data-bind="text: name,click: $parent.loadRepo"></li>
     </ul>
+</div>
+<div data-bind="with: openRepository,visible: openRepository()">
+    <div class="left">
+        <ul class="list" data-bind="foreach: milestones">
+            <li class="listitem" data-bind="text: title"></li>
+        </ul>
+        <ul class="list" data-bind="foreach: labels.labels">
+            <li class="listitem" draggable="true">
+                <i class="listitemBadge" data-bind="style: {'background-color':'#' + color}"></i>
+                <span data-bind="text: name"></span>
+            </li>
+        </ul>
+    </div>
+    <div class="main">
+        <text-toggle params="text:'Add list', commit: $root.repository.addLabel,commitParams: [$data,true]"></text-toggle>
+        <div data-bind="foreach: labels.lists">
+            <div data-bind="text:name"></div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

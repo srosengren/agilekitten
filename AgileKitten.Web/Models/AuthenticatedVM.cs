@@ -13,7 +13,7 @@ namespace AgileKitten.Web.Models
         public string RootUrl { get; set; }
 
         [JsonProperty(PropertyName = "repositories")]
-        public IEnumerable<Repository> Repositories { get; set; }
+        public IEnumerable<RepositoryMeta> Repositories { get; set; }
 
         public AuthenticatedVM(string rootUrl)
         {
