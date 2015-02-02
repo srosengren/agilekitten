@@ -137,7 +137,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\App\application.js" />
-    <Content Include="Scripts\App\repositoryVM.js" />
+    <Content Include="Scripts\App\app.list.js" />
+    <Content Include="Scripts\App\app.repository.js" />
     <Content Include="Scripts\knockout-3.2.0.debug.js" />
     <Content Include="Scripts\knockout-3.2.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />

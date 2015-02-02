@@ -13,23 +13,32 @@
         <li data-bind="text: name,click: $parent.loadRepo"></li>
     </ul>
 </div>
-<div data-bind="with: openRepository,visible: openRepository()">
+<div data-bind="with: openRepository,visible: openRepository()" class="board">
     <div class="left">
         <ul class="list" data-bind="foreach: milestones">
             <li class="listitem" data-bind="text: title"></li>
         </ul>
         <ul class="list" data-bind="foreach: labels.labels">
-            <li class="listitem" draggable="true">
-                <i class="listitemBadge" data-bind="style: {'background-color':'#' + color}"></i>
-                <span data-bind="text: name"></span>
+            <li class="listitem" draggable="true" data-bind="event: {dragstart: $root.list.drag.start}">
+                <i class="listitemBadge" data-bind="style: {'background-color':'#' + color()}"></i>
+                <span data-bind="text: name() + issues().length"></span>
             </li>
         </ul>
     </div>
     <div class="main">
-        <text-toggle params="text:'Add list', commit: $root.repository.addLabel,commitParams: [$data,true]"></text-toggle>
-        <div data-bind="foreach: labels.lists">
-            <div data-bind="text:name"></div>
+        <!-- ko foreach: labels.lists -->
+        <div class="boardList" draggable="true">
+            <div class="boardListHeader" data-bind="style: {'background-color':'#' + color()},css:{'is-dark': color.isDark}">
+                <span data-bind="text:name"></span>
+            </div>
+            <ul class="list" data-bind="foreach: issues">
+                <li class="listitem" data-bind="text: title"></li>
+            </ul>
         </div>
+        <!-- /ko -->
+    </div>
+    <div class="boardButton" data-bind="event: {dragover:$root.board.drag.over,drop: $root.board.drag.drop}">
+        <text-toggle params="text:'Add list', commit: $root.repository.addLabel,commitParams: [$data,true]"></text-toggle>
     </div>
 </div>
 

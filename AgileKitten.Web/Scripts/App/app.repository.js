@@ -1,17 +1,24 @@
-﻿(function (app) {
+﻿var application = (function (app) {
     app.repository = {
         make: function (repo) {
             repo.issues = ko.observableArray(repo.issues);
-
             repo.labels = ko.observableArray(repo.labels);
+
+            for (var i = 0; i < repo.issues().length; i++) {
+                repo.issues()[i].labels = ko.observableArray(repo.issues()[i].labels); //TODO: move to own factory
+            }
+            for (var i = 0; i < repo.labels().length; i++) {
+                app.list.make(repo, repo.labels()[i]);
+            }
+
             repo.labels.labels = ko.computed(function () {
                 return ko.utils.arrayFilter(repo.labels(), function (l) {
-                    return !l.isIssueList;
+                    return !l.isIssueList();
                 });
             });
             repo.labels.lists = ko.computed(function () {
                 return ko.utils.arrayFilter(repo.labels(), function (l) {
-                    return l.isIssueList;
+                    return l.isIssueList();
                 });
             });
 
@@ -22,12 +29,14 @@
         addLabel: function (repo, addAsList, name) {
             if (!name)
                 return;
-            repo.labels.push({
-                githubRepositoryId: repo.githubId,
-                color: Math.floor(Math.random() * 16777215).toString(16),
+            if (ko.utils.arrayFirst(repo.labels(), function (l) { return l.name().toLowerCase() === name.toLowerCase() }))
+                return;
+
+            repo.labels.push(app.list.make(repo, {
                 isIssueList: addAsList,
                 name: name
-            })
+            }));
         }
     };
+    return app;
 })(application || {});

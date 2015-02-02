@@ -1,25 +1,34 @@
-﻿.borderRadius(@radius){
+﻿.borderRadius(@radius) {
     -moz-border-radius: @radius;
     -webkit-border-radius: @radius;
     border-radius: @radius;
 }
 
 .board {
-    .left {
+    display: table;
 
+    .left {
+        display: table-cell;
+        width: 12em;
     }
 
     .main {
-
+        display: table-cell;
     }
 }
 
 .list {
-
+    margin: 0;
+    padding: 0;
 }
 
 .listitem {
     list-style: none;
+
+    &:hover {
+        cursor: pointer;
+    }
+
     span {
         vertical-align: middle;
     }
@@ -32,4 +41,30 @@
     margin: 0 0.25em;
     .borderRadius(0.25em);
     vertical-align: middle;
+}
+
+.boardList, .boardButton {
+    display: inline-block;
+    width: 16em;
+}
+
+.boardList {
+    .borderRadius(0.25em);
+    -moz-box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+
+    padding-bottom: 2em;
+
+    vertical-align: top;
+}
+
+.boardListHeader {
+    .borderRadius(0.25em 0.25em 0 0);
+    text-shadow: #333 0 -1px 0;
+    padding: 0.25em 0.75em;
+}
+
+.boardListHeader.is-dark {
+    color: white;
 }

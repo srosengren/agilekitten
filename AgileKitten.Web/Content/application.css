@@ -1,5 +1,22 @@
-﻿.listitem {
+﻿.board {
+  display: table;
+}
+.board .left {
+  display: table-cell;
+  width: 12em;
+}
+.board .main {
+  display: table-cell;
+}
+.list {
+  margin: 0;
+  padding: 0;
+}
+.listitem {
   list-style: none;
+}
+.listitem:hover {
+  cursor: pointer;
 }
 .listitem span {
   vertical-align: middle;
@@ -13,5 +30,30 @@
   -webkit-border-radius: 0.25em;
   border-radius: 0.25em;
   vertical-align: middle;
+}
+.boardList,
+.boardButton {
+  display: inline-block;
+  width: 16em;
+}
+.boardList {
+  -moz-border-radius: 0.25em;
+  -webkit-border-radius: 0.25em;
+  border-radius: 0.25em;
+  -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  padding-bottom: 2em;
+  vertical-align: top;
+}
+.boardListHeader {
+  -moz-border-radius: 0.25em 0.25em 0 0;
+  -webkit-border-radius: 0.25em 0.25em 0 0;
+  border-radius: 0.25em 0.25em 0 0;
+  text-shadow: #333333 0 -1px 0;
+  padding: 0.25em 0.75em;
+}
+.boardListHeader.is-dark {
+  color: white;
 }
 /*# sourceMappingURL=application.css.map */
