@@ -9,7 +9,7 @@
         }
         reposVM.loadRepo = function (repo) {
             sr.ajax({
-                url: app.settings.rootUrl + 'api/getrepository?repoid=' + repo.githubId,
+                url: app.settings.rootUrl + 'api/getrepository?ownerLogin=' + repo.ownerLogin + '&repoName=' + repo.name,
                 success: function(data)
                 {
                     data = JSON.parse(data);
@@ -28,6 +28,8 @@
         app.repositoriesVM.init(serverVM.repositories);
 
         ko.applyBindings(app);
+
+        app.repositoriesVM.loadRepo(app.repositoriesVM.repositories()[0]);; //TODO: dev help
     }
 
     return app;

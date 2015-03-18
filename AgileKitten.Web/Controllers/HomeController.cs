@@ -51,7 +51,7 @@ namespace AgileKitten.Web.Controllers
                     throw new InvalidOperationException("SECURITY FAIL!");
                 Session["CSRF:State"] = null;
 
-                SignIn(code);
+                await SignIn(code);
             }
 
             return RedirectToAction("Index");

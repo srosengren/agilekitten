@@ -28,22 +28,6 @@
             label.isBacklog = ko.observable(false);
 
             return label;
-        },
-        drag: {
-            start: function (label, event) {
-                event.dataTransfer.setData('agile-kitten-label', label.name());
-                event.dataTransfer.effectAllowed = "copy";
-                return true;
-            },
-            over: function (issue, event) {
-
-            },
-            drop: function (issue, event) {
-
-            },
-            end: function () {
-
-            }
         }
     }
     return app;

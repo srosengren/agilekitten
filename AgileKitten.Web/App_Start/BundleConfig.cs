@@ -23,6 +23,9 @@ namespace AgileKitten.Web
             bundles.Add(new Bundle("~/bundles/application")
                 .Include("~/Scripts/knockout-{version}.js")
                 .Include("~/Scripts/knockout.mapping-*")
+                //.Include("~/Scripts/knockout.draggable.js")
+                .Include("~/Scripts/sortable.min.js")
+                .Include("~/Scripts/knockout-sortable.js")
                 .Include("~/Scripts/sr.js")
                 .Include("~/Scripts/App/*.js")
                 );

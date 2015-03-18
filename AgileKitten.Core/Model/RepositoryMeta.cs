@@ -16,8 +16,8 @@ namespace AgileKitten.Core.Model
         [JsonProperty(PropertyName = "openIssues")]
         public int OpenIssues { get; set; }
 
-        [JsonProperty(PropertyName = "ownerName")]
-        public string OwnerName { get; set; }
+        [JsonProperty(PropertyName = "ownerLogin")]
+        public string OwnerLogin { get; set; }
 
         public static RepositoryMeta Make(Octokit.Repository repo)
         {
@@ -26,7 +26,7 @@ namespace AgileKitten.Core.Model
                 GithubId = repo.Id,
                 Name = repo.Name,
                 OpenIssues = repo.OpenIssuesCount,
-                OwnerName = repo.Owner.Name
+                OwnerLogin = repo.Owner.Login
             };
         }
     }

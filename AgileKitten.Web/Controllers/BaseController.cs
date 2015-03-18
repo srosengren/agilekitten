@@ -56,11 +56,17 @@ namespace AgileKitten.Web.Controllers
                     new OauthTokenRequest(ClientId, ClientSecret, code)
                     );
 
+            Client.Credentials = new Credentials(token.AccessToken);
+
+            var user = await Client.User.Current();
+
             var ctx = Request.GetOwinContext();
             var authManager = ctx.Authentication;
 
             var identity = new ClaimsIdentity(new Claim[] { 
-                    new Claim(ClaimTypes.Authentication,token.AccessToken)
+                    new Claim(ClaimTypes.Authentication,token.AccessToken),
+                    new Claim(ClaimTypes.NameIdentifier,user.Login),
+                    new Claim(ClaimTypes.Name,user.Name)
                 }, "ApplicationCookie");
 
             authManager.SignIn(identity);

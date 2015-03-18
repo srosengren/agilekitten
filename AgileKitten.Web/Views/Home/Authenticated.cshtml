@@ -16,28 +16,29 @@
 <div data-bind="with: openRepository,visible: openRepository()" class="board">
     <div class="left">
         <ul class="list" data-bind="foreach: milestones">
-            <li class="listitem" data-bind="text: title"></li>
+            <li class="listitem" data-bind="text: name || title"></li>
         </ul>
-        <ul class="list" data-bind="foreach: labels.labels">
-            <li class="listitem" draggable="true" data-bind="event: {dragstart: $root.list.drag.start}">
+        <ul class="list" data-bind="draggable: { foreach: labels.labels,collection:labels, options: {group: 'labels'} }">
+            <li class="listitem">
                 <i class="listitemBadge" data-bind="style: {'background-color':'#' + color()}"></i>
                 <span data-bind="text: name() + issues().length"></span>
             </li>
         </ul>
     </div>
     <div class="main">
-        <!-- ko foreach: labels.lists -->
-        <div class="boardList" draggable="true">
-            <div class="boardListHeader" data-bind="style: {'background-color':'#' + color()},css:{'is-dark': color.isDark}">
-                <span data-bind="text:name"></span>
+        <div style="min-height:200px;min-width: 200px;background: #eee;white-space:nowrap" data-bind="sortable: {foreach: labels.lists,collection:labels, options: {group: 'labels',handle:'.boardListHeader', onAdd: function(e,label){label.isIssueList(true);}} }">
+            <div class="boardList">
+                <div class="boardListHeader" data-bind="style: {'background-color':'#' + color()},css:{'is-dark': color.isDark}">
+                    <span data-bind="text:name"></span>
+                </div>
+                <div data-bind="sortable: {foreach:issues,collection:$parent.issues, options:{group:'issues',onAdd:function(e){e.cancelBubble = true;},onRemove: function(e){e.cancelBubble = true;},onUpdate: function(e){e.cancelBubble = true;}}}">
+                    <div class="boardListItem" data-bind="text: title"></div>
+                </div>
+                <div class="boardListItem">Add issue</div>
             </div>
-            <ul class="list" data-bind="foreach: issues">
-                <li class="listitem" data-bind="text: title"></li>
-            </ul>
         </div>
-        <!-- /ko -->
     </div>
-    <div class="boardButton" data-bind="event: {dragover:$root.board.drag.over,drop: $root.board.drag.drop}">
+    <div class="boardButton">
         <text-toggle params="text:'Add list', commit: $root.repository.addLabel,commitParams: [$data,true]"></text-toggle>
     </div>
 </div>

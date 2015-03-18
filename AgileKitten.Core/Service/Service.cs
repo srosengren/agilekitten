@@ -11,11 +11,11 @@ namespace AgileKitten.Core.Service
 {
     public class Service
     {
-        private GHRepository repository;
+        private DBRepository repository;
 
-        public GHRepository Repository
+        public DBRepository dbRepository
         {
-            get { return repository ?? (repository = new GHRepository()); }
+            get { return repository ?? (repository = new DBRepository()); }
         }
 
         public gh.GitHubClient Client { get; set; }
@@ -29,13 +29,14 @@ namespace AgileKitten.Core.Service
 
         public async Task<IEnumerable<Issue>> GetIssuesForRepository(string owner, string name)
         {
-            var ghIssues = await Client.Issue.GetForRepository(owner,name,new gh.RepositoryIssueRequest{
+            var ghIssues = await Client.Issue.GetForRepository(owner, name, new gh.RepositoryIssueRequest
+            {
                 Filter = gh.IssueFilter.All
             });
             return ghIssues.Select(i => Issue.Make(i));
         }
 
-        public async Task<IEnumerable<Milestone>> GetMilestonesForRepository(string owner,string name)
+        public async Task<IEnumerable<Milestone>> GetMilestonesForRepository(string owner, string name)
         {
             var milestones = await Client.Issue.Milestone.GetForRepository(owner, name);
             return milestones.Select(m => Milestone.Make(m));
@@ -47,18 +48,32 @@ namespace AgileKitten.Core.Service
             return labels.Select(l => Label.Make(l));
         }
 
-        public async Task<RepositoryContent> GetRepository(int repoId)
+        public async Task<RepositoryContent> GetRepository(string owner, string repoName)
         {
-            var board  = await Repository.GetBoard(repoId);
-            var labelTask = GetLabelsForRepository(board.OwnerName,board.RepositoryName);
-            var milestonesTask = GetMilestonesForRepository(board.OwnerName, board.RepositoryName);
-            var issueTask = GetIssuesForRepository(board.OwnerName, board.RepositoryName);
+            var repoTask = Client.Repository.Get(owner, repoName);
+            var labelTask = GetLabelsForRepository(owner, repoName);
+            var milestonesTask = GetMilestonesForRepository(owner, repoName);
+            var issueTask = GetIssuesForRepository(owner, repoName);
 
-            board.labels = await labelTask;
-            board.Milestones = await milestonesTask;
-            board.Issues = await issueTask;
+            var repo = await repoTask;
+            var retval = new RepositoryContent
+            {
+                GithubRepositoryId = repo.Id,
+                RepositoryName = repo.Name,
+                OwnerLogin = repo.Owner.Login,
+                Milestones = await milestonesTask,
+                Issues = await issueTask,
+                Labels = await labelTask
+            };
 
-            return board;
+            var dbRepo = await dbRepository.MergeRepository(new Model.DTO.Repository
+            {
+                OriginId = repo.Id,
+                Labels = labelTask.Result.Select(l => new Model.DTO.Label { Name = l.Name }),
+                Issues = issueTask.Result.Select(i => new Model.DTO.Issue { Number = i.Number })
+            });
+
+            return retval;
         }
     }
 }

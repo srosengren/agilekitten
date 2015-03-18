@@ -17,9 +17,9 @@ namespace AgileKitten.Web.Controllers.Api
             return await Service.GetRepositories();
         }
 
-        public async Task<RepositoryContent> GetRepository(int repoId)
+        public async Task<RepositoryContent> GetRepository(string ownerlogin,string repoName)
         {
-            return await Service.GetRepository(repoId);
+            return await Service.GetRepository(ownerlogin,repoName);
         }
     }
 }

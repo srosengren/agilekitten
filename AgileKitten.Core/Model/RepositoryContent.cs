@@ -15,11 +15,11 @@ namespace AgileKitten.Core.Model
         [JsonProperty(PropertyName = "repositoryName")]
         public string RepositoryName { get; set; }
 
-        [JsonProperty(PropertyName = "ownerName")]
-        public string OwnerName { get; set; }
+        [JsonProperty(PropertyName = "ownerLogin")]
+        public string OwnerLogin { get; set; }
 
         [JsonProperty(PropertyName = "labels")]
-        public IEnumerable<Label> labels { get; set; }
+        public IEnumerable<Label> Labels { get; set; }
 
         [JsonProperty(PropertyName = "milestones")]
         public IEnumerable<Milestone> Milestones { get; set; }
