@@ -75,5 +75,15 @@ namespace AgileKitten.Core.Service
 
             return retval;
         }
+
+        public async Task SortIssue(Model.DTO.Issue issue)
+        {
+            await dbRepository.SortIssue(issue);
+        }
+
+        public async Task SortLabel(Model.DTO.Label label)
+        {
+            await dbRepository.SortLabel(label);
+        }
     }
 }

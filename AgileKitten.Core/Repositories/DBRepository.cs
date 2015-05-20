@@ -14,9 +14,14 @@ namespace AgileKitten.Core.Repositories
 {
     public class DBRepository
     {
+        private SqlConnection getOpenConnection()
+        {
+            return new SqlConnection(ConfigurationManager.ConnectionStrings["Storage"].ConnectionString);
+        }
+
         public async Task<Model.DTO.Repository> MergeRepository(Model.DTO.Repository repository)
         {
-            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["Storage"].ConnectionString))
+            using (var con = getOpenConnection())
             {
                 var result = await con.QueryMultipleAsync("MergeRepository", new RepositoryParam(repository), commandType: CommandType.StoredProcedure);
                 var repo = result.Read<Model.DTO.Repository>().FirstOrDefault();
@@ -26,6 +31,22 @@ namespace AgileKitten.Core.Repositories
                     repo.Issues = result.Read<Model.DTO.Issue>();
                 }
                 return repo;
+            }
+        }
+
+        public async Task SortIssue(Model.DTO.Issue issue)
+        {
+            using(var con = getOpenConnection())
+            {
+                await con.ExecuteAsync("SortIssue", issue, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task SortLabel(Model.DTO.Label label)
+        {
+            using(var con = getOpenConnection())
+            {
+                await con.ExecuteAsync("SortLabel", label, commandType: CommandType.StoredProcedure);
             }
         }
     }

@@ -21,5 +21,11 @@ namespace AgileKitten.Web.Controllers.Api
         {
             return await Service.GetRepository(ownerlogin,repoName);
         }
+
+        public async Task SortLabel(Core.Model.DTO.Label label)
+        {
+            //TODO: Check that the user has the correct repository rights to do this.
+            await Service.SortLabel(label);
+        }
     }
 }
